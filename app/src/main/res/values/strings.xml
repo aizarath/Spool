@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Spool</string>
+
+    <string name="title">Title</string>
+    <string name="name">Name</string>
+    <string name="created">Created</string>
+    <string name="modified">Modified</string>
+    <string name="color">Color</string>
+
+    <string name="note_deleted">Note deleted</string>
+    <string name="undo">Undo</string>
+</resources>
