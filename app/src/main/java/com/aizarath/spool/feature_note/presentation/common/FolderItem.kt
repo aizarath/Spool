@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -49,12 +50,14 @@ fun FolderItem(
             AsyncImage(
                 model = folder.iconImage?.let { File(it) },
                 contentDescription = "Folder Icon",
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize(),
                 placeholder = painterResource(id = R.drawable.ic_vault),
                 error = painterResource(id = R.drawable.ic_vault),
                 contentScale = ContentScale.Crop,
             )
         }
+
         Column(
             modifier = Modifier
                 .weight(0.65f)

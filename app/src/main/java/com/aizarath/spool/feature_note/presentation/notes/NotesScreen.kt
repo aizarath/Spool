@@ -16,10 +16,10 @@ fun NotesScreen(
     Notes(
         state = state,
         onEvent = viewModel::onEvent, // { viewModel.onEvent(it) }
-        onNoteClick = { id, color ->
-            if (id != null && color != null){
+        onNoteClick = { folderId, noteId, color ->
+            if (noteId != null && color != null){
                 navController.navigate(
-                    Screen.AddEditNoteScreen.route + "?noteId=${id}&noteColor=${color}"
+                    Screen.AddEditNoteScreen.route + "?folderId=${folderId}&noteId=${noteId}&noteColor=${color}"
                 )
             } else {
                 navController.navigate(Screen.AddEditNoteScreen.route)

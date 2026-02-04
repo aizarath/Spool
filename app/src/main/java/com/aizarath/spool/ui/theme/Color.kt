@@ -1,10 +1,14 @@
 package com.aizarath.spool.ui.theme
 
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
 
-val Pantone = Color(0xFFFCE7B8)
-val Phantom = Color(0xFF1C1B1B)
+val Blush = Color(0xFFFFC4E2)
+val Lemon = Color(0xFFFFF455)
+val Tangerine = Color(0xFFF68A68)
+val Maple = Color(0xFFEE4E4E)
+val Mango = Color(0xFFFFC700)
+
+val Phantom = Color(0xFF0E0E0E)
 val EggWash = Color(0xFFF5DB86)
 val DarkGreen = Color(0xFF0A3323)
 val MossGreen = Color(0xFF839958)

@@ -15,14 +15,22 @@ import androidx.compose.ui.platform.LocalContext
 private val DarkColorScheme = darkColorScheme(
     primary = DarkGreen,
     secondary = MossGreen,
-    tertiary = MidnightGreen
+    tertiary = MidnightGreen,
+
+    surface = Phantom,
+
+    outline = Beige,
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = RosyBrown,
     secondary = Beige,
-    tertiary = EggWash
+    tertiary = EggWash,
 
+    background = Mango,
+    surface = Lemon,
+
+    outline = Phantom,
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
     surface = Color(0xFFFFFBFE),
@@ -38,7 +46,7 @@ private val LightColorScheme = lightColorScheme(
 fun SpoolTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

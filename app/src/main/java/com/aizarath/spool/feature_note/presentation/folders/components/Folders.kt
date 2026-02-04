@@ -25,16 +25,27 @@ import androidx.compose.ui.unit.dp
 import com.aizarath.spool.feature_note.domain.model.Folder
 import com.aizarath.spool.feature_note.domain.util.FolderOrder
 import com.aizarath.spool.feature_note.domain.util.OrderType
+import com.aizarath.spool.feature_note.presentation.common.AddFloatingButton
 import com.aizarath.spool.feature_note.presentation.common.FolderItem
 import com.aizarath.spool.feature_note.presentation.folders.FoldersState
+import com.aizarath.spool.ui.theme.SpoolTheme
 
 @Composable
 fun Folders(
     state: FoldersState,
     onFolderClick: (folder: Folder) -> Unit,
-    onAddFolderClick: (id: Int?, color: Int?) -> Unit
+    onAddFolderClick: (id: Int?, color: Int?) -> Unit,
+    onNoteClick: (folderInt: Int?, noteId: Int?, color: Int?) -> Unit
 ) {
-    Scaffold { innerPadding ->
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        floatingActionButton = {
+            AddFloatingButton(
+                folderId = null,
+                onNoteClick = onNoteClick
+            )
+        },
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -78,59 +89,62 @@ fun Folders(
 @Preview
 @Composable
 fun FoldersPreview(){
-    Folders(
-        state = FoldersState(
-            folders = listOf(
-                Folder(
-                    name = "Personal",
-                    description = "Private notes and daily thoughts",
-                    timestamp = System.currentTimeMillis(),
-                    lastModified = System.currentTimeMillis(),
-                    iconImage = "ic_folder_personal", // Example resource name
-                    color = 0xFFBB86FC.toInt(), // Light Purple
-                    id = 1
+    SpoolTheme{
+        Folders(
+            state = FoldersState(
+                folders = listOf(
+                    Folder(
+                        name = "Personal",
+                        description = "Private notes and daily thoughts",
+                        timestamp = System.currentTimeMillis(),
+                        lastModified = System.currentTimeMillis(),
+                        iconImage = "ic_folder_personal", // Example resource name
+                        color = 0xFFBB86FC.toInt(), // Light Purple
+                        id = 1
+                    ),
+                    Folder(
+                        name = "Work Projects",
+                        description = "Tasks, meeting minutes, and deadlines",
+                        timestamp = System.currentTimeMillis() - 86400000, // 1 day ago
+                        lastModified = System.currentTimeMillis(),
+                        iconImage = "ic_folder_work",
+                        color = 0xFF03DAC5.toInt(), // Teal
+                        id = 2
+                    ),
+                    Folder(
+                        name = "Travel Ideas",
+                        description = "Bucket list and flight itineraries",
+                        timestamp = System.currentTimeMillis() - 172800000, // 2 days ago
+                        lastModified = System.currentTimeMillis() - 3600000, // 1 hour ago
+                        iconImage = "ic_folder_travel",
+                        color = 0xFFFFB74D.toInt(), // Orange
+                        id = 3
+                    ),
+                    Folder(
+                        name = "Finance",
+                        description = "Expenses and budget planning",
+                        timestamp = System.currentTimeMillis(),
+                        lastModified = System.currentTimeMillis(),
+                        iconImage = "ic_folder_finance",
+                        color = 0xFF81C784.toInt(), // Green
+                        id = 4
+                    ),
+                    Folder(
+                        name = "Recipes",
+                        description = null, // Testing a null description
+                        timestamp = System.currentTimeMillis() - 604800000, // 1 week ago
+                        lastModified = System.currentTimeMillis() - 86400000,
+                        iconImage = "ic_folder_food",
+                        color = 0xFFE57373.toInt(), // Red/Pink
+                        id = 5
+                    )
                 ),
-                Folder(
-                    name = "Work Projects",
-                    description = "Tasks, meeting minutes, and deadlines",
-                    timestamp = System.currentTimeMillis() - 86400000, // 1 day ago
-                    lastModified = System.currentTimeMillis(),
-                    iconImage = "ic_folder_work",
-                    color = 0xFF03DAC5.toInt(), // Teal
-                    id = 2
-                ),
-                Folder(
-                    name = "Travel Ideas",
-                    description = "Bucket list and flight itineraries",
-                    timestamp = System.currentTimeMillis() - 172800000, // 2 days ago
-                    lastModified = System.currentTimeMillis() - 3600000, // 1 hour ago
-                    iconImage = "ic_folder_travel",
-                    color = 0xFFFFB74D.toInt(), // Orange
-                    id = 3
-                ),
-                Folder(
-                    name = "Finance",
-                    description = "Expenses and budget planning",
-                    timestamp = System.currentTimeMillis(),
-                    lastModified = System.currentTimeMillis(),
-                    iconImage = "ic_folder_finance",
-                    color = 0xFF81C784.toInt(), // Green
-                    id = 4
-                ),
-                Folder(
-                    name = "Recipes",
-                    description = null, // Testing a null description
-                    timestamp = System.currentTimeMillis() - 604800000, // 1 week ago
-                    lastModified = System.currentTimeMillis() - 86400000,
-                    iconImage = "ic_folder_food",
-                    color = 0xFFE57373.toInt(), // Red/Pink
-                    id = 5
-                )
+                folderOrder = FolderOrder.Modified(OrderType.Descending),
+                isOrderSectionVisible = false
             ),
-            folderOrder = FolderOrder.Modified(OrderType.Descending),
-            isOrderSectionVisible = false
-        ),
-        onFolderClick = { folder -> {} },
-        onAddFolderClick = { id: Int?, color: Int? -> {} },
-    )
+            onFolderClick = { folder -> {} },
+            onAddFolderClick = { id: Int?, color: Int? -> {} },
+            onNoteClick = {folderId, noteId, color -> {}}
+        )
+    }
 }

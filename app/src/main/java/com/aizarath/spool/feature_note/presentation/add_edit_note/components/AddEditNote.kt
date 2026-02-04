@@ -1,6 +1,5 @@
 package com.aizarath.spool.feature_note.presentation.add_edit_note.components
 
-import android.graphics.Color.toArgb
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background

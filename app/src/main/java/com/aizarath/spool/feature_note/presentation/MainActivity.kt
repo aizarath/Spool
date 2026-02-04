@@ -1,5 +1,8 @@
 package com.aizarath.spool.feature_note.presentation
 
+import android.R.attr.defaultValue
+import android.R.attr.name
+import android.R.attr.type
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -63,8 +66,14 @@ class MainActivity : ComponentActivity() {
                             NotesScreen(navController=navController)
                         }
                         composable(route = Screen.AddEditNoteScreen.route +
-                                "?noteId={noteId}&noteColor={noteColor}",
+                                "?folderId={folderId}&noteId={noteId}&noteColor={noteColor}",
                                 arguments = listOf(
+                                    navArgument(
+                                        name = "folderId"
+                                    ){
+                                      type = NavType.IntType
+                                      defaultValue = 1
+                                    },
                                     navArgument(
                                         name = "noteId"
                                     ){

@@ -20,8 +20,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Sort
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +33,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.aizarath.spool.feature_note.presentation.common.AddFloatingButton
 import com.aizarath.spool.feature_note.presentation.common.NoteItem
 import com.aizarath.spool.feature_note.presentation.common.OrderSection
 import com.aizarath.spool.feature_note.presentation.notes.NotesEvent
@@ -44,21 +43,18 @@ import com.aizarath.spool.feature_note.presentation.notes.NotesState
 fun Notes(
     state: NotesState,
     onEvent: (NotesEvent) -> Unit,
-    onNoteClick: (id: Int?, color: Int?) -> Unit
+    onNoteClick: (folderId: Int?, noteId: Int?, color: Int?) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    onNoteClick(null, null)
-                },
-                containerColor = MaterialTheme.colorScheme.primary
-            ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add note")
-            }
+            AddFloatingButton(
+                folderId = null,
+                onNoteClick = onNoteClick
+            )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
@@ -117,7 +113,7 @@ fun Notes(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                onNoteClick(note.id, note.color)
+                                onNoteClick(1, note.id, note.color)
                             },
                     )
                 }

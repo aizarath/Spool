@@ -28,6 +28,15 @@ fun FoldersScreen(
         },
         onAddFolderClick = { id, color ->
             showAddFolderDialog.value = true
+        },
+        onNoteClick = { folderId, noteId, color ->
+            if (noteId != null && color != null){
+                navController.navigate(
+                    Screen.AddEditNoteScreen.route + "?folderId=${folderId}&noteId=${noteId}&noteColor=${color}"
+                )
+            } else {
+                navController.navigate(Screen.AddEditNoteScreen.route)
+            }
         }
     )
 

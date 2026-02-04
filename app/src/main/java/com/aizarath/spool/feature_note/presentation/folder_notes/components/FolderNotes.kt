@@ -15,41 +15,45 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.aizarath.spool.feature_note.domain.model.Folder
+import com.aizarath.spool.feature_note.domain.model.Note
+import com.aizarath.spool.feature_note.presentation.common.AddFloatingButton
 import com.aizarath.spool.feature_note.presentation.common.FolderItem
 import com.aizarath.spool.feature_note.presentation.common.NoteItem
 import com.aizarath.spool.feature_note.presentation.folder_notes.FolderNotesEvent
 import com.aizarath.spool.feature_note.presentation.folder_notes.FolderNotesState
+import com.aizarath.spool.ui.theme.SpoolTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FolderNotes(
     state: FolderNotesState,
     onEvent: (FolderNotesEvent) -> Unit,
-    onNoteClick: (id: Int?, color: Int?) -> Unit,
+    onNoteClick: (folderId: Int?, noteId: Int?, color: Int?) -> Unit,
     onBackClick: () -> Unit
 ) {
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
-            // Stick bar
+            // Sticky bar
             FolderTopBar(
                 onBackClick = onBackClick,
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    onNoteClick(null, null)
-                },
-                containerColor = Color.Red
-            ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add note")
-            }
+            AddFloatingButton(
+                folderId = state.folder?.id,
+                onNoteClick = onNoteClick
+            )
         },
     ) { innerPadding ->
 //        AnimatedVisibility(
@@ -89,10 +93,53 @@ fun FolderNotes(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable{
-                            onNoteClick(note.id, note.color)
+                            onNoteClick(state.folder?.id,note.id, note.color)
                         },
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun FolderNotesPreview() {
+    SpoolTheme {
+        FolderNotes(
+            state = FolderNotesState(
+                folder = Folder(
+                    name = "Random",
+                    description = "Oh oh oh",
+                    timestamp = System.currentTimeMillis(),
+                    lastModified = System.currentTimeMillis(),
+                    iconImage = "",
+                    color = Color.LightGray.toArgb(),
+                    id = 8
+                ),
+                notes = listOf(
+                    Note(
+                        id = 1,
+                        title = "Grocery List",
+                        content = "Milk, Eggs, Bread",
+                        color = Color.Green.toArgb(),
+                        timestamp = System.currentTimeMillis(),
+                        lastModified = System.currentTimeMillis(),
+                        folderId = 8
+                    ),
+                    Note(
+                        id = 2,
+                        title = "Gym Schedule",
+                        content = "Leg day tomorrow",
+                        color = Color.Yellow.toArgb(),
+                        timestamp = System.currentTimeMillis(),
+                        lastModified = System.currentTimeMillis(),
+                        folderId = 8
+                    )
+                )
+            ),
+            onEvent = {},
+            onNoteClick = {_, _, _ -> },
+            onBackClick = {}
+        )
     }
 }

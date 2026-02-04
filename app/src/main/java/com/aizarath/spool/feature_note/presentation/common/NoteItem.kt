@@ -1,6 +1,7 @@
 package com.aizarath.spool.feature_note.presentation.common
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +24,7 @@ fun NoteItem(
     Box(
         modifier = modifier
             .background(Color(note.color))
+            .border(1.dp, MaterialTheme.colorScheme.outline)
             .padding(16.dp)
     ){
         Column{
