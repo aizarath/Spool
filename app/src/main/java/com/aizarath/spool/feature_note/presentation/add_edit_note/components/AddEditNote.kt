@@ -1,5 +1,6 @@
 package com.aizarath.spool.feature_note.presentation.add_edit_note.components
 
+import android.graphics.Color.toArgb
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -27,27 +28,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.aizarath.spool.feature_note.presentation.common.SlantedShape
 import com.aizarath.spool.feature_note.presentation.add_edit_note.AddEditNoteEvent
-import com.aizarath.spool.feature_note.presentation.add_edit_note.NoteTextFieldState
+import com.aizarath.spool.feature_note.presentation.common.TextFieldState
+import com.aizarath.spool.ui.theme.DefaultTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddEditNote(
-    noteTitle: NoteTextFieldState,
-    noteContent: NoteTextFieldState,
+    noteTitle: TextFieldState,
+    noteContent: TextFieldState,
     noteColor: Int,
-    noteBackground: String?,
     onEvent: (AddEditNoteEvent) -> Unit,
 ) {
     val noteBackgroundAnimatable = remember {
         Animatable(
-            Color(if(noteColor != -1) noteColor else Color.White.toArgb())
+            Color(if(noteColor != -1) noteColor else DefaultTheme.defaultColor.toArgb())
         )
     }
 
     val sheetState = rememberModalBottomSheetState()
     val showAppearanceSheet = remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
+
+    val fontColor = DefaultTheme.getFontColor(Color(noteColor))
 
     // TODO(Change this)
     var baseColor = Color(noteColor)
@@ -94,9 +97,6 @@ fun AddEditNote(
             .fillMaxSize()
             .padding(innerPadding)
         ){
-            noteBackground?.let { imageRes ->
-                TODO()
-            }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -114,7 +114,8 @@ fun AddEditNote(
                     },
                     isHintVisible = noteTitle.isHintVisible,
                     singleLine = true,
-                    textStyle = MaterialTheme.typography.headlineMedium
+                    fontColor = fontColor,
+                    textStyle = MaterialTheme.typography.headlineMedium.copy(color = fontColor)
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 TransparentHintTextField(
@@ -127,7 +128,8 @@ fun AddEditNote(
                         onEvent(AddEditNoteEvent.ChangeContentFocus(it))
                     },
                     isHintVisible = noteContent.isHintVisible,
-                    textStyle = MaterialTheme.typography.bodyLarge,
+                    fontColor = fontColor,
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = fontColor),
                     modifier = Modifier.fillMaxHeight()
                 )
             }
@@ -139,10 +141,9 @@ fun AddEditNote(
 @Composable
 fun AddEditNotePreview(){
     AddEditNote(
-        noteTitle = NoteTextFieldState(text = "Grocery List", hint = "Title", isHintVisible = false),
-        noteContent = NoteTextFieldState(text = "Milk, Eggs, Bread, and Coffee beans.", hint = "Type something", isHintVisible = false),
-        noteColor = Color.Green.toArgb(),
-        noteBackground = null,
+        noteTitle = TextFieldState(text = "Grocery List", hint = "Title", isHintVisible = false),
+        noteContent = TextFieldState(text = "Milk, Eggs, Bread, and Coffee beans.", hint = "Type something", isHintVisible = false),
+        noteColor = DefaultTheme.defaultColor.toArgb(),
         onEvent = {}
     )
 }

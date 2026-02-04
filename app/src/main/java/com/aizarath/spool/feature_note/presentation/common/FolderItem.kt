@@ -1,5 +1,6 @@
 package com.aizarath.spool.feature_note.presentation.common
 
+import android.R.attr.contentDescription
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -46,12 +47,12 @@ fun FolderItem(
                 .aspectRatio(1f)
         ){
             AsyncImage(
-                model = File(folder.iconImage),
+                model = folder.iconImage?.let { File(it) },
                 contentDescription = "Folder Icon",
                 modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop,
-                error = painterResource(id = R.drawable.ic_vault),
                 placeholder = painterResource(id = R.drawable.ic_vault),
+                error = painterResource(id = R.drawable.ic_vault),
+                contentScale = ContentScale.Crop,
             )
         }
         Column(

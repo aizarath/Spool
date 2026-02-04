@@ -10,6 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.aizarath.spool.feature_note.presentation.common.UiEvent
 import com.aizarath.spool.feature_note.domain.model.Note
 import com.aizarath.spool.feature_note.domain.use_case.note.NoteUseCases
+import com.aizarath.spool.feature_note.presentation.common.TextFieldState
+import com.aizarath.spool.ui.theme.DefaultTheme
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -23,17 +25,19 @@ class AddEditNoteViewModel @Inject constructor(
     private val noteUseCases: NoteUseCases,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(){
-    private val _noteTitle = mutableStateOf(NoteTextFieldState(
-        hint = "Enter title"
-    ))
-    val noteTitle: State<NoteTextFieldState> = _noteTitle
+    private val _noteTitle = mutableStateOf(
+        TextFieldState(
+            hint = "Enter title"
+        )
+    )
+    val noteTitle: State<TextFieldState> = _noteTitle
 
-    private val _noteContent = mutableStateOf(NoteTextFieldState(
+    private val _noteContent = mutableStateOf(TextFieldState(
         hint = "Type something..."
     ))
-    val noteContent: State<NoteTextFieldState> = _noteContent
+    val noteContent: State<TextFieldState> = _noteContent
 
-    private val _noteColor = mutableIntStateOf(savedStateHandle.get<Int>("noteColor") ?: Note.noteColors.random().toArgb())
+    private val _noteColor = mutableIntStateOf(savedStateHandle.get<Int>("noteColor") ?: DefaultTheme.defaultColor.toArgb())
     val noteColor: State<Int> = _noteColor
 
     private val _noteBackground = mutableStateOf<String?>(null)
@@ -107,9 +111,6 @@ class AddEditNoteViewModel @Inject constructor(
             is AddEditNoteEvent.ChangeColor -> {
                 _noteColor.intValue = event.color
             }
-            is AddEditNoteEvent.ChangeBackground -> {
-                _noteBackground.value = event.imageResId
-            }
             is AddEditNoteEvent.SaveNote -> {
                 saveNoteJob?.cancel()
                 saveNoteJob = viewModelScope.launch {
@@ -137,7 +138,7 @@ class AddEditNoteViewModel @Inject constructor(
             return
         }
 
-        val id = noteUseCases.addNote(currentNote)
+        val id = noteUseCases.saveNoteAndTouchFolder(currentNote)
 
         lastSavedNote = currentNote.copy(id = id.toInt())
 

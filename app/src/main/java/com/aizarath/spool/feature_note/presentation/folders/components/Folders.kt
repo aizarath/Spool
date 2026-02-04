@@ -31,7 +31,8 @@ import com.aizarath.spool.feature_note.presentation.folders.FoldersState
 @Composable
 fun Folders(
     state: FoldersState,
-    onFolderClick: (folder: Folder) -> Unit
+    onFolderClick: (folder: Folder) -> Unit,
+    onAddFolderClick: (id: Int?, color: Int?) -> Unit
 ) {
     Scaffold { innerPadding ->
         Column(
@@ -50,7 +51,7 @@ fun Folders(
                     style = MaterialTheme.typography.headlineLarge
                 )
                 IconButton(
-                    onClick = {}
+                    onClick = {onAddFolderClick(null, null)}
                 ) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "Add folder")
                 }
@@ -129,6 +130,7 @@ fun FoldersPreview(){
             folderOrder = FolderOrder.Modified(OrderType.Descending),
             isOrderSectionVisible = false
         ),
-        onFolderClick = {folder -> {}},
+        onFolderClick = { folder -> {} },
+        onAddFolderClick = { id: Int?, color: Int? -> {} },
     )
 }

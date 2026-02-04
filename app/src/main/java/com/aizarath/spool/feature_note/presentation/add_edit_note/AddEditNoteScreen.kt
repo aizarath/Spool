@@ -28,7 +28,6 @@ fun AddEditNoteScreen(
         noteTitle = viewModel.noteTitle.value,
         noteContent = viewModel.noteContent.value,
         noteColor = viewModel.noteColor.value,
-        noteBackground = viewModel.noteBackground.value,
         onEvent = { viewModel.onEvent(it) },  // { viewModel.onEvent(it) }
     )
 }

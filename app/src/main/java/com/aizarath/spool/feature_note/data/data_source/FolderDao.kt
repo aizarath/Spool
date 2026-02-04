@@ -13,10 +13,14 @@ interface FolderDao {
     fun getFolders(): Flow<List<Folder>>
 
     @Query("SELECT * FROM Folder WHERE id = :id")
-    fun getFolderById(id: Int): Flow<Folder>
+    fun getFolderById(id: Int): Flow<Folder?>
 
     @Upsert
-    suspend fun upsertFolder(folder: Folder)
+    suspend fun upsertFolder(folder: Folder) : Long
+
+    @Query("UPDATE Folder Set lastModified = :timestamp WHERE id = :id")
+    suspend fun updateFolderTimestamp(id: Int, timestamp: Long)
+
 
     @Delete
     suspend fun deleteFolder(folder: Folder)

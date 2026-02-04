@@ -20,7 +20,6 @@ class DatabaseSeeder @Inject constructor(
             put("description", "Default folder")
             put("timestamp", now)
             put("lastModified", now)
-            put("iconImage", defaultIcon)
             put("color", 0xFFE1E3D3)
         }
 

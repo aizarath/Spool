@@ -12,15 +12,19 @@ class FolderRepositoryImp(
         return dao.getFolders()
     }
 
-    override fun getFolderById(id: Int): Flow<Folder> {
+    override fun getFolderById(id: Int): Flow<Folder?> {
         return dao.getFolderById(id)
     }
 
-    override suspend fun upsertFolder(folder: Folder) {
+    override suspend fun upsertFolder(folder: Folder): Long {
         return dao.upsertFolder(folder)
     }
 
+    override suspend fun updateFolderTimestamp(id: Int, timestamp: Long) {
+        dao.updateFolderTimestamp(id, timestamp)
+    }
+
     override suspend fun deleteFolder(folder: Folder) {
-        return dao.deleteFolder(folder)
+        dao.deleteFolder(folder)
     }
 }

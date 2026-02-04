@@ -6,9 +6,11 @@ import kotlinx.coroutines.flow.Flow
 interface FolderRepository {
     fun getFolders(): Flow<List<Folder>>
 
-    fun getFolderById(id: Int): Flow<Folder>
+    fun getFolderById(id: Int): Flow<Folder?>
 
-    suspend fun upsertFolder(folder: Folder)
+    suspend fun upsertFolder(folder: Folder): Long
+
+    suspend fun updateFolderTimestamp(id: Int, timestamp: Long)
 
     suspend fun deleteFolder(folder: Folder)
 }

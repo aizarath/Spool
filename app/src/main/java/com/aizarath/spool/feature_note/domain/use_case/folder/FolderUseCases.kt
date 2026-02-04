@@ -4,6 +4,7 @@ import javax.inject.Inject
 
 data class FolderUseCases @Inject constructor(
     val getFolders: GetFolders,
+    val getFolder: GetFolder,
     val addFolder: AddFolder,
     val getFolderWithNotes: GetFolderWithNotes,
     val deleteFolder: DeleteFolder

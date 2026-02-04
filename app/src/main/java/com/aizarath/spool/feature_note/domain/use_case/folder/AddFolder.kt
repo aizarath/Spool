@@ -10,12 +10,11 @@ class AddFolder @Inject constructor(
     private val repository : FolderRepository
 ) {
 
-    @Throws(InvalidFolderException::class)
-    suspend operator fun invoke(folder: Folder){
+    suspend operator fun invoke(folder: Folder): Long{
         if(folder.name.isBlank()){
             throw InvalidFolderException("Enter a name for the folder")
         }
 
-        repository.upsertFolder(folder)
+        return repository.upsertFolder(folder)
     }
 }

@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.aizarath.spool.feature_note.domain.model.Note
+import com.aizarath.spool.ui.theme.DefaultTheme
 
 @Composable
 fun NoteAppearanceSheet(
@@ -45,7 +46,7 @@ fun NoteAppearanceSheet(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Note.noteColors.forEach { color ->
+            DefaultTheme.palette.forEach  { color ->
                 val colorInt = color.toArgb()
                 Box(
                     modifier = Modifier

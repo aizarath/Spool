@@ -1,26 +1,35 @@
 package com.aizarath.spool.ui.theme
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 
-val White = Color(0xFFFFFFFF)
-val Pantone = Color(0xFFF5E7C6)
-val LightGrey = Color(0xFFB4B4B4)
+val Pantone = Color(0xFFFCE7B8)
+val Phantom = Color(0xFF1C1B1B)
+val EggWash = Color(0xFFF5DB86)
+val DarkGreen = Color(0xFF0A3323)
+val MossGreen = Color(0xFF839958)
+val Beige = Color(0xFFF7F4D5)
+val RosyBrown = Color(0xFFD3968C)
+val MidnightGreen = Color(0xFF105666)
 
-val Green40 = Color(0xFFC5D89D)
-val Green1 = Color(0xFFD6DF65)
-val Green2 = Color(0xFF93BD57)
-val Green3 = Color(0xFFA8BBA3)
-val Green4 = Color(0xFF4CC967)
+object DefaultTheme {
+    val palette = listOf(
+        DarkGreen, MossGreen, Beige, EggWash,
+        RosyBrown, MidnightGreen, Phantom,
+    )
 
-val Blue40 = Color(0xFFBBE0EF)
-val Blue2 = Color(0xFF94B4C1)
-val Blue3 = Color(0xFF91C6BC)
-val Blue4 = Color(0xFF62AFEF)
-val Red40 = Color(0xFFDA8C8C)
-val Red2 = Color(0xFFE17BD3)
-val Red3 = Color(0xFFF8836E)
-val Red4 = Color(0xFFCC496F)
+    val defaultColor = RosyBrown
 
-val Purple40 = Color(0xFFB5A0FD)
-val PurpleGrey40 = Color(0xFF9085A6)
-val Pink40 = Color(0xFFC792C0)
+    fun getFontColor(backgroundColor: Color): Color{
+        return when (backgroundColor) {
+            DarkGreen -> MossGreen
+            MossGreen -> MidnightGreen
+            Beige -> Phantom
+            EggWash -> DarkGreen
+            RosyBrown -> Beige
+            MidnightGreen -> EggWash
+            Phantom -> RosyBrown
+            else -> MossGreen
+        }
+    }
+}

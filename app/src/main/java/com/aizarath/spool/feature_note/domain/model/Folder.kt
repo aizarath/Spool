@@ -9,7 +9,7 @@ data class Folder(
     val description: String?,
     val timestamp: Long,
     val lastModified: Long,
-    val iconImage: String,
+    val iconImage: String?,
     val color: Int,
     @PrimaryKey val id: Int? = null
 )

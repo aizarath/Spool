@@ -10,9 +10,12 @@ import com.aizarath.spool.feature_note.domain.use_case.folder.FolderUseCases
 import com.aizarath.spool.feature_note.domain.use_case.note.NoteUseCases
 import com.aizarath.spool.feature_note.domain.util.NoteOrder
 import com.aizarath.spool.feature_note.domain.util.OrderType
+import com.aizarath.spool.feature_note.presentation.common.UiEvent
 import com.aizarath.spool.feature_note.presentation.notes.NotesEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -22,7 +25,7 @@ import javax.inject.Inject
 class FolderNotesViewModel @Inject constructor(
     private val folderUseCases: FolderUseCases,
     private val noteUseCases: NoteUseCases,
-    private val savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle
 ) : ViewModel(){
 
     private val _state = mutableStateOf(FolderNotesState())
@@ -33,6 +36,9 @@ class FolderNotesViewModel @Inject constructor(
     private var recentlyDeletedNote: Note? = null
 
     private var getNotesJob: Job? = null
+
+    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
 
     init {
         getNotes(NoteOrder.Modified(OrderType.Descending))
@@ -56,7 +62,7 @@ class FolderNotesViewModel @Inject constructor(
             }
             is FolderNotesEvent.RestoreNote -> {
                 viewModelScope.launch {
-                    noteUseCases.addNote(recentlyDeletedNote ?: return@launch)
+                    noteUseCases.saveNoteAndTouchFolder(recentlyDeletedNote ?: return@launch)
                     recentlyDeletedNote = null
                 }
             }
@@ -74,10 +80,15 @@ class FolderNotesViewModel @Inject constructor(
     private fun getNotes(noteOrder: NoteOrder){
         getNotesJob?.cancel()
         getNotesJob = folderUseCases.getFolderWithNotes(folderId, noteOrder)
-            .onEach{(folder, notes) ->
+            .onEach{ folderWithNotes ->
+                if (folderWithNotes == null){
+                    _eventFlow.emit(UiEvent.NavigateBack)
+                    return@onEach
+                }
+
                 _state.value = state.value.copy(
-                    folder = folder,
-                    notes = notes,
+                    folder = folderWithNotes.folder,
+                    notes = folderWithNotes.notes,
                     noteOrder = noteOrder
                 )
             }

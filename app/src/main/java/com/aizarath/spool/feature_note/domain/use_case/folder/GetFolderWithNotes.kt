@@ -1,6 +1,9 @@
 package com.aizarath.spool.feature_note.domain.use_case.folder
 
+import com.aizarath.spool.feature_note.domain.model.Folder
+import com.aizarath.spool.feature_note.domain.model.FolderNotFoundException
 import com.aizarath.spool.feature_note.domain.model.FolderWithNotes
+import com.aizarath.spool.feature_note.domain.model.Note
 import com.aizarath.spool.feature_note.domain.repository.FolderRepository
 import com.aizarath.spool.feature_note.domain.repository.NoteRepository
 import com.aizarath.spool.feature_note.domain.util.NoteOrder
@@ -16,15 +19,20 @@ class GetFolderWithNotes @Inject constructor(
     operator fun invoke(
         folderId: Int,
         noteOrder: NoteOrder
-    ): Flow<FolderWithNotes> {
-        val folderFlow = folderRepository.getFolderById(folderId)
-        val notesFlow = noteRepository.getNotesByFolderId(folderId)
+    ): Flow<FolderWithNotes?> {
+        val folderFlow: Flow<Folder?> = folderRepository.getFolderById(folderId)
+        val notesFlow: Flow<List<Note>> = noteRepository.getNotesByFolderId(folderId)
 
         return combine(folderFlow, notesFlow) { folder, notes ->
-            FolderWithNotes(
-                folder = folder,
-                notes = notes.sortNotes(noteOrder)
-            )
+            if (folder == null) {
+                null
+            }
+            else {
+                FolderWithNotes(
+                    folder = folder,
+                    notes = notes.sortNotes(noteOrder)
+                )
+            }
         }
     }
 }
