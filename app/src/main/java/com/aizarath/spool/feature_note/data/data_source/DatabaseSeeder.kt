@@ -6,13 +6,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.aizarath.spool.R
 import javax.inject.Inject
 
-class DatabaseSeeder @Inject constructor(
-    private val storageManager: FileStorageManager
-) {
+class DatabaseSeeder @Inject constructor() {
     fun seedDefaultFolder(db: SupportSQLiteDatabase){
-        val defaultIcon = "vault_default.png"
-        storageManager.saveDefaultPngToInternalStorage(R.drawable.ic_vault, defaultIcon)
-
         val now = System.currentTimeMillis()
         val values = ContentValues().apply{
             put("id", 1)

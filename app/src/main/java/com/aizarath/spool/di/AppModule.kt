@@ -5,11 +5,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.AutoMigrationSpec
 import androidx.sqlite.db.SupportSQLiteDatabase
+import coil3.decode.ImageSource
 import com.aizarath.spool.feature_note.data.data_source.DatabaseSeeder
 import com.aizarath.spool.feature_note.data.data_source.NoteDatabase
 import com.aizarath.spool.feature_note.data.repository.FolderRepositoryImp
+import com.aizarath.spool.feature_note.data.repository.ImageStorageManagerImp
 import com.aizarath.spool.feature_note.data.repository.NoteRepositoryImp
 import com.aizarath.spool.feature_note.domain.repository.FolderRepository
+import com.aizarath.spool.feature_note.domain.repository.ImageStorageManager
 import com.aizarath.spool.feature_note.domain.repository.NoteRepository
 import dagger.Module
 import dagger.Provides
@@ -51,5 +54,13 @@ object AppModule {
     @Singleton
     fun provideNoteRepository(db: NoteDatabase): NoteRepository{
         return NoteRepositoryImp(db.noteDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideImageStorageManager(
+        @ApplicationContext context: Context
+    ) : ImageStorageManager {
+        return ImageStorageManagerImp(context)
     }
 }

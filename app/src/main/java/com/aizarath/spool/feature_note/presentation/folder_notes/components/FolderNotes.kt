@@ -10,11 +10,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -26,10 +22,12 @@ import androidx.compose.ui.unit.dp
 import com.aizarath.spool.feature_note.domain.model.Folder
 import com.aizarath.spool.feature_note.domain.model.Note
 import com.aizarath.spool.feature_note.presentation.common.AddFloatingButton
+import com.aizarath.spool.feature_note.presentation.common.ColorThemeWrapper
 import com.aizarath.spool.feature_note.presentation.common.FolderItem
 import com.aizarath.spool.feature_note.presentation.common.NoteItem
 import com.aizarath.spool.feature_note.presentation.folder_notes.FolderNotesEvent
 import com.aizarath.spool.feature_note.presentation.folder_notes.FolderNotesState
+import com.aizarath.spool.ui.theme.DefaultTheme
 import com.aizarath.spool.ui.theme.SpoolTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,21 +39,26 @@ fun FolderNotes(
     onBackClick: () -> Unit
 ) {
 
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
-        topBar = {
-            // Sticky bar
-            FolderTopBar(
-                onBackClick = onBackClick,
-            )
-        },
-        floatingActionButton = {
-            AddFloatingButton(
-                folderId = state.folder?.id,
-                onNoteClick = onNoteClick
-            )
-        },
-    ) { innerPadding ->
+    ColorThemeWrapper(
+        initialColor = state.folder?.color ?: DefaultTheme.defaultColor.toArgb(),
+        onColorChanged = {newColor -> onEvent(FolderNotesEvent.ChangeColor(newColor))}
+    ) { _, openSheet ->
+        Scaffold(
+            containerColor = MaterialTheme.colorScheme.background,
+            topBar = {
+                // Sticky bar
+                FolderTopBar(
+                    onBackClick = onBackClick,
+                    onColorClick = openSheet
+                )
+            },
+            floatingActionButton = {
+                AddFloatingButton(
+                    folderId = state.folder?.id,
+                    onNoteClick = onNoteClick
+                )
+            },
+        ) { innerPadding ->
 //        AnimatedVisibility(
 //            visible = state.isOrderSectionVisible,
 //            enter = fadeIn() + slideInVertically(),
@@ -72,30 +75,31 @@ fun FolderNotes(
 //            )
 //        }
 //        Spacer(modifier = Modifier.height(16.dp))
-        LazyVerticalStaggeredGrid(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            columns = StaggeredGridCells.Fixed(2),
-            contentPadding = PaddingValues(16.dp),
-            verticalItemSpacing = 16.dp,
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            item(span = StaggeredGridItemSpan.FullLine){
-                state.folder?.let {
-                    FolderItem(folder = it)
+            LazyVerticalStaggeredGrid(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                columns = StaggeredGridCells.Fixed(2),
+                contentPadding = PaddingValues(16.dp),
+                verticalItemSpacing = 16.dp,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                item(span = StaggeredGridItemSpan.FullLine){
+                    state.folder?.let {
+                        FolderItem(folder = it)
+                    }
                 }
-            }
 
-            items(state.notes){ note ->
-                NoteItem(
-                    note = note,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable{
-                            onNoteClick(state.folder?.id,note.id, note.color)
-                        },
-                )
+                items(state.notes){ note ->
+                    NoteItem(
+                        note = note,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable{
+                                onNoteClick(state.folder?.id,note.id, note.color)
+                            },
+                    )
+                }
             }
         }
     }

@@ -7,6 +7,8 @@ val Lemon = Color(0xFFFFF455)
 val Tangerine = Color(0xFFF68A68)
 val Maple = Color(0xFFEE4E4E)
 val Mango = Color(0xFFFFC700)
+val Underwater = Color(0xFF305AAD)
+val DeepOcean = Color(0xFF1F3B8D)
 
 val Phantom = Color(0xFF0E0E0E)
 val EggWash = Color(0xFFF5DB86)

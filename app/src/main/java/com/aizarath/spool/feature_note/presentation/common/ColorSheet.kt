@@ -1,4 +1,4 @@
-package com.aizarath.spool.feature_note.presentation.add_edit_note.components
+package com.aizarath.spool.feature_note.presentation.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,11 +21,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import com.aizarath.spool.feature_note.domain.model.Note
 import com.aizarath.spool.ui.theme.DefaultTheme
 
 @Composable
-fun NoteAppearanceSheet(
+fun ColorSheet(
     selectedColor: Int,
     onColorSelected: (Int) -> Unit,
 ) {

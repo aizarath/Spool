@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aizarath.spool.feature_note.domain.model.Folder
+import com.aizarath.spool.feature_note.domain.repository.ImageStorageManager
 import com.aizarath.spool.feature_note.domain.use_case.folder.FolderUseCases
 import com.aizarath.spool.feature_note.presentation.common.TextFieldState
 import com.aizarath.spool.feature_note.presentation.common.UiEvent
@@ -21,6 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddEditFolderViewModel @Inject constructor(
+    private val imageManager: ImageStorageManager,
     private val folderUseCases: FolderUseCases,
 ): ViewModel() {
     private val _folderName = mutableStateOf(TextFieldState(hint = "Name your folder"))
@@ -32,8 +34,11 @@ class AddEditFolderViewModel @Inject constructor(
     private val _folderColor = mutableIntStateOf(DefaultTheme.defaultColor.toArgb())
     val folderColor: State<Int> = _folderColor
 
-    private val _folderIcon = mutableStateOf(String())
+    private val _folderIcon = mutableStateOf<String?>(null)
     val folderIcon: State<String?> = _folderIcon
+
+    private var initialIcon: String? = null
+    private var sessionTempIcon: String? = null
 
     private val _folderId = mutableIntStateOf(-1)
     val folderId : State<Int> = _folderId
@@ -76,7 +81,13 @@ class AddEditFolderViewModel @Inject constructor(
                             folderDescription.value.text.isBlank()
                 )
             }
-            is AddEditFolderEvent.ChangeIcon -> {}
+            is AddEditFolderEvent.ChangeIcon -> {
+                sessionTempIcon?.let {imageManager.deleteImage(it)}
+
+                val newIcon = imageManager.saveImage(event.uri)
+                sessionTempIcon = newIcon
+                _folderIcon.value = newIcon
+            }
             is AddEditFolderEvent.ChangeColor -> {
                 _folderColor.intValue = event.color
             }
@@ -93,7 +104,14 @@ class AddEditFolderViewModel @Inject constructor(
                     }
                 }
             }
+            is AddEditFolderEvent.Dismiss ->{
+                sessionTempIcon?.let { imageManager.deleteImage(it) }
+            }
             is AddEditFolderEvent.SaveFolder -> {
+                if (folderIcon.value != initialIcon){
+                    initialIcon?.let { imageManager.deleteImage(it) }
+                }
+
                 saveFolderJob?.cancel()
                 saveFolderJob = viewModelScope.launch {
                     saveFolder()
@@ -120,6 +138,8 @@ class AddEditFolderViewModel @Inject constructor(
                 )
             }
             _folderColor.intValue = folder.color
+            initialIcon = folder.iconImage
+            _folderIcon.value = folder.iconImage
             folderTimestamp = folder.timestamp
         }
     }
@@ -131,7 +151,7 @@ class AddEditFolderViewModel @Inject constructor(
             timestamp = folderTimestamp,
             lastModified = System.currentTimeMillis(),
             color = folderColor.value,
-            iconImage = "",
+            iconImage = folderIcon.value,
             id = currentFolderId
         )
 

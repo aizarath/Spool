@@ -48,7 +48,7 @@ fun FolderItem(
                 .aspectRatio(1f)
         ){
             AsyncImage(
-                model = folder.iconImage?.let { File(it) },
+                model = folder.iconImage,
                 contentDescription = "Folder Icon",
                 modifier = Modifier
                     .fillMaxSize(),

@@ -13,7 +13,7 @@ fun AddEditFolderDialog(
     folderId: Int?,
     folderColor: Int?,
     onDismiss: () -> Unit,
-    viewModel: AddEditFolderViewModel = hiltViewModel()
+    viewModel: AddEditFolderViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(viewModel.folderId) {
         viewModel.onEvent(
@@ -31,6 +31,7 @@ fun AddEditFolderDialog(
             }
         }
     }
+
 
     Dialog(
         onDismissRequest = onDismiss

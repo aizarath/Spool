@@ -27,6 +27,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.aizarath.spool.feature_note.presentation.common.SlantedShape
 import com.aizarath.spool.feature_note.presentation.add_edit_note.AddEditNoteEvent
+import com.aizarath.spool.feature_note.presentation.common.ColorSheet
+import com.aizarath.spool.feature_note.presentation.common.ColorThemeWrapper
 import com.aizarath.spool.feature_note.presentation.common.TextFieldState
 import com.aizarath.spool.ui.theme.DefaultTheme
 import kotlinx.coroutines.launch
@@ -39,98 +41,67 @@ fun AddEditNote(
     noteColor: Int,
     onEvent: (AddEditNoteEvent) -> Unit,
 ) {
-    val noteBackgroundAnimatable = remember {
-        Animatable(
-            Color(if(noteColor != -1) noteColor else DefaultTheme.defaultColor.toArgb())
-        )
-    }
-
-    val sheetState = rememberModalBottomSheetState()
-    val showAppearanceSheet = remember { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
-
     val fontColor = DefaultTheme.getFontColor(Color(noteColor))
 
-    // TODO(Change this)
-    var baseColor = Color(noteColor)
-    val borderColor = lerp(baseColor, Color.Black, 0.5f)
+    ColorThemeWrapper(
+        initialColor = noteColor,
+        onColorChanged = {newColor -> onEvent(AddEditNoteEvent.ChangeColor(newColor))}
+    ) {
+        animatedColor, openSheet ->
 
-    Scaffold(
-        containerColor = Color(noteColor),
-        topBar = {
-            NoteTopBar(
-                onBackClick = {onEvent(AddEditNoteEvent.SaveNote)}
-            )
-        },
-        bottomBar = {
-            NoteToolBar(
-                onAppearanceClick = { showAppearanceSheet.value = true }
-            )
-        }
-    ) { innerPadding ->
-
-        if (showAppearanceSheet.value){
-            ModalBottomSheet(
-                onDismissRequest = {showAppearanceSheet.value = false},
-                sheetState = sheetState,
-                shape = SlantedShape(slantHeight = 80.dp),
-                dragHandle = null,
-                containerColor = borderColor
-            ) {
-                NoteAppearanceSheet(
-                    selectedColor = noteColor,
-                    onColorSelected = { colorInt ->
-                        scope.launch{
-                            noteBackgroundAnimatable.animateTo(
-                                targetValue = Color(colorInt),
-                                animationSpec = tween(durationMillis = 500)
-                            )
-                        }
-                        onEvent(AddEditNoteEvent.ChangeColor(colorInt))
-                    }
+        Scaffold(
+            containerColor = Color(noteColor),
+            topBar = {
+                NoteTopBar(
+                    onBackClick = {onEvent(AddEditNoteEvent.SaveNote)}
+                )
+            },
+            bottomBar = {
+                NoteToolBar(
+                    onColorClick = openSheet
                 )
             }
-        }
-
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding)
-        ){
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(noteBackgroundAnimatable.value)
-                    .padding(16.dp)
+        ) { innerPadding ->
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
             ){
-                TransparentHintTextField(
-                    text = noteTitle.text,
-                    hint = noteTitle.hint,
-                    onValueChange = {
-                        onEvent(AddEditNoteEvent.EnteredTitle(it))
-                    },
-                    onFocusChange ={
-                        onEvent(AddEditNoteEvent.ChangeTitleFocus(it))
-                    },
-                    isHintVisible = noteTitle.isHintVisible,
-                    singleLine = true,
-                    fontColor = fontColor,
-                    textStyle = MaterialTheme.typography.headlineMedium.copy(color = fontColor)
-                )
-                Spacer(modifier = Modifier.height(24.dp))
-                TransparentHintTextField(
-                    text = noteContent.text,
-                    hint = noteContent.hint,
-                    onValueChange = {
-                        onEvent(AddEditNoteEvent.EnteredContent(it))
-                    },
-                    onFocusChange ={
-                        onEvent(AddEditNoteEvent.ChangeContentFocus(it))
-                    },
-                    isHintVisible = noteContent.isHintVisible,
-                    fontColor = fontColor,
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = fontColor),
-                    modifier = Modifier.fillMaxHeight()
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(animatedColor)
+                        .padding(16.dp)
+                ){
+                    TransparentHintTextField(
+                        text = noteTitle.text,
+                        hint = noteTitle.hint,
+                        onValueChange = {
+                            onEvent(AddEditNoteEvent.EnteredTitle(it))
+                        },
+                        onFocusChange ={
+                            onEvent(AddEditNoteEvent.ChangeTitleFocus(it))
+                        },
+                        isHintVisible = noteTitle.isHintVisible,
+                        singleLine = true,
+                        fontColor = fontColor,
+                        textStyle = MaterialTheme.typography.headlineMedium.copy(color = fontColor)
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
+                    TransparentHintTextField(
+                        text = noteContent.text,
+                        hint = noteContent.hint,
+                        onValueChange = {
+                            onEvent(AddEditNoteEvent.EnteredContent(it))
+                        },
+                        onFocusChange ={
+                            onEvent(AddEditNoteEvent.ChangeContentFocus(it))
+                        },
+                        isHintVisible = noteContent.isHintVisible,
+                        fontColor = fontColor,
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = fontColor),
+                        modifier = Modifier.fillMaxHeight()
+                    )
+                }
             }
         }
     }

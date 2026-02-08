@@ -1,7 +1,11 @@
 package com.aizarath.spool.feature_note.presentation.add_edit_folder.components
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,8 +16,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
@@ -21,7 +28,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
@@ -37,7 +46,6 @@ import com.aizarath.spool.feature_note.presentation.add_edit_note.components.Tra
 import com.aizarath.spool.feature_note.presentation.common.TextFieldState
 import com.aizarath.spool.ui.theme.DefaultTheme
 import com.aizarath.spool.ui.theme.SpoolTheme
-import java.io.File
 
 @Composable
 fun AddEditFolderCard(
@@ -49,6 +57,14 @@ fun AddEditFolderCard(
     onEvent: (AddEditFolderEvent) -> Unit,
     isSaveEnabled: Boolean = false
 ) {
+    val photoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let{
+            onEvent(AddEditFolderEvent.ChangeIcon(it))
+        }
+    }
+
     val fontColor = DefaultTheme.getFontColor(Color(folderColor))
 
     OutlinedCard(
@@ -66,15 +82,25 @@ fun AddEditFolderCard(
                         .padding(8.dp)
                         .aspectRatio(1f)
                         .border(1.dp, MaterialTheme.colorScheme.outline)
+                        .clickable {
+                            photoPickerLauncher.launch("image/*")
+                        }
                 ){
                     AsyncImage(
-                        model = folderIcon?.let { File(it) },
+                        model = folderIcon,
                         contentDescription = "Folder Icon",
                         modifier = Modifier
                             .fillMaxSize(),
                         placeholder = painterResource(id = R.drawable.ic_vault),
                         error = painterResource(id = R.drawable.ic_vault),
                         contentScale = ContentScale.Crop,
+                    )
+                    Icon(
+                        imageVector = Icons.Default.Image,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .align(Alignment.Center),
+                        tint = Color.White
                     )
                 }
 

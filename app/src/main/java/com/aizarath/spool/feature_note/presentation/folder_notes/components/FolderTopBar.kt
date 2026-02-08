@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun FolderTopBar(
     onBackClick: () -> Unit,
+    onColorClick: () -> Unit
 ) {
     TopAppBar(
         title = {Text("")},
@@ -24,6 +25,11 @@ fun FolderTopBar(
             IconButton(onClick = onBackClick) {
                 Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
+        },
+        actions = {
+            FolderActions(
+                onColorClick = onColorClick
+            )
         },
         colors = TopAppBarDefaults.topAppBarColors(
         containerColor = Color.Transparent

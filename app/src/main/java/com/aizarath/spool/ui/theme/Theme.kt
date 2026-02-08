@@ -24,11 +24,16 @@ private val DarkColorScheme = darkColorScheme(
 
 private val LightColorScheme = lightColorScheme(
     primary = RosyBrown,
+    onPrimary = MidnightGreen,
     secondary = Beige,
+    onSecondary = MossGreen,
     tertiary = EggWash,
+    onTertiary = DarkGreen,
 
     background = Mango,
     surface = Lemon,
+    onSurface = DeepOcean,
+    onSurfaceVariant = Underwater,
 
     outline = Phantom,
     /* Other default colors to override

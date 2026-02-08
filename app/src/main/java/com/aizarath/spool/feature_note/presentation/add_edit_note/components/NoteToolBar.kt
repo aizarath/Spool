@@ -10,15 +10,15 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun NoteToolBar(
-    onAppearanceClick: () -> Unit
+    onColorClick: () -> Unit
 ) {
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.surface,
     ) {
-        IconButton(onClick = onAppearanceClick) {
+        IconButton(onClick = onColorClick) {
             Icon(
                 imageVector = Icons.Default.Palette,
-                contentDescription = "Change Appearance"
+                contentDescription = "Change color"
             )
         }
     }

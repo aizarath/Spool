@@ -66,6 +66,16 @@ class FolderNotesViewModel @Inject constructor(
                     recentlyDeletedNote = null
                 }
             }
+            is FolderNotesEvent.ChangeColor -> {
+                val currentFolder = state.value.folder
+                viewModelScope.launch {
+                    currentFolder?.let {
+                        folderUseCases.addFolder(
+                            it.copy(color = event.color)
+                        )
+                    }
+                }
+            }
             is FolderNotesEvent.ToggleOrderSection -> {
                 _state.value = state.value.copy(
                     isOrderSectionVisible = !state.value.isOrderSectionVisible
