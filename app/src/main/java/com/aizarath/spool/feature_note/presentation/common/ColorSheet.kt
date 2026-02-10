@@ -54,8 +54,8 @@ fun ColorSheet(
                         .clip(CircleShape)
                         .background(color)
                         .border(
-                            width = 3.dp,
-                            color = if (selectedColor == colorInt) Color.Black else Color.Transparent,
+                            width = 1.dp,
+                            color = if (selectedColor == colorInt) MaterialTheme.colorScheme.outline else Color.Transparent,
                             shape = CircleShape
                         )
                         .clickable{onColorSelected(colorInt)}

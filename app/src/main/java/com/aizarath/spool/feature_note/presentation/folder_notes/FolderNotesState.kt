@@ -9,5 +9,7 @@ data class FolderNotesState(
     val folder: Folder? = null,
     val notes: List<Note> = emptyList(),
     val noteOrder: NoteOrder = NoteOrder.Created(OrderType.Descending),
-    val isOrderSectionVisible: Boolean = false
+    val isOrderSectionVisible: Boolean = false,
+    val selectedNoteIds: Set<Int> = emptySet(),
+    val isSelectionMode: Boolean = false
 )

@@ -8,6 +8,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 
@@ -19,21 +20,28 @@ private val DarkColorScheme = darkColorScheme(
 
     surface = Phantom,
 
+    error = CherryWine,
+    onError = Beige,
+
     outline = Beige,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = RosyBrown,
-    onPrimary = MidnightGreen,
+    primary = Beige,
+    onPrimary = Phantom,
     secondary = Beige,
-    onSecondary = MossGreen,
+    onSecondary = MidnightGreen,
     tertiary = EggWash,
     onTertiary = DarkGreen,
 
-    background = Mango,
-    surface = Lemon,
-    onSurface = DeepOcean,
-    onSurfaceVariant = Underwater,
+    background = Beige,
+    onBackground = Phantom,
+    surface = Tangerine,
+    onSurface = Phantom,
+    onSurfaceVariant = Slate,
+
+    error = Maple,
+    onError = Phantom,
 
     outline = Phantom,
     /* Other default colors to override

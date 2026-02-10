@@ -8,6 +8,7 @@ import com.aizarath.spool.feature_note.domain.model.Note
 import com.aizarath.spool.feature_note.domain.use_case.note.NoteUseCases
 import com.aizarath.spool.feature_note.domain.util.NoteOrder
 import com.aizarath.spool.feature_note.domain.util.OrderType
+import com.aizarath.spool.feature_note.presentation.folder_notes.FolderNotesEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -57,6 +58,38 @@ class NotesViewModel @Inject constructor(
                 _state.value = state.value.copy(
                     isOrderSectionVisible = !state.value.isOrderSectionVisible
                 )
+            }
+            is NotesEvent.ToggleSelection -> {
+                val currentSelected = state.value.selectedNoteIds
+                val newSelected = if (currentSelected.contains(event.noteId)){
+                    currentSelected - event.noteId
+                } else {
+                    currentSelected + event.noteId
+                }
+
+                _state.value = state.value.copy(
+                    selectedNoteIds = newSelected,
+                    isSelectionMode = newSelected.isNotEmpty()
+                )
+            }
+            is NotesEvent.SelectAll -> {
+                val allIds = state.value.notes.map { it.id!! }.toSet()
+                _state.value = state.value.copy(
+                    selectedNoteIds = allIds
+                )
+            }
+            is NotesEvent.ClearSelection -> {
+                _state.value = state.value.copy(
+                    selectedNoteIds = emptySet(),
+                    isSelectionMode = false
+                )
+            }
+            is NotesEvent.DeleteSelectedNotes -> {
+                viewModelScope.launch {
+                    noteUseCases.deleteNotes(state.value.selectedNoteIds.toList())
+
+                    onEvent(NotesEvent.ClearSelection)
+                }
             }
         }
     }

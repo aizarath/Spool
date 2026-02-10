@@ -140,7 +140,7 @@ fun FoldersPreview(){
                     )
                 ),
                 folderOrder = FolderOrder.Modified(OrderType.Descending),
-                isOrderSectionVisible = false
+                isOrderSectionVisible = false,
             ),
             onFolderClick = { folder -> {} },
             onAddFolderClick = { id: Int?, color: Int? -> {} },

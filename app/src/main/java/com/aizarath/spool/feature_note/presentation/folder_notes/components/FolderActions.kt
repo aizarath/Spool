@@ -16,9 +16,10 @@ import com.aizarath.spool.feature_note.presentation.add_edit_folder.AddEditFolde
 
 @Composable
 fun FolderActions(
-    onColorClick: () -> Unit
+    onColorClick: () -> Unit,
+    onEditClick: () -> Unit
 ) {
-    // Actions: Delete, Edit Details, Change Color
+    // Actions: Edit Details, Change Color
     Row() {
         IconButton(
             onClick = onColorClick
@@ -30,20 +31,11 @@ fun FolderActions(
             )
         }
         IconButton(
-            onClick = {}
+            onClick = onEditClick
         ) {
             Icon(
                 imageVector = Icons.Default.Edit,
                 contentDescription = "Edit folder",
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        IconButton(
-            onClick = {}
-        ) {
-            Icon(
-                imageVector = Icons.Default.Delete,
-                contentDescription = "Delete folder",
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }

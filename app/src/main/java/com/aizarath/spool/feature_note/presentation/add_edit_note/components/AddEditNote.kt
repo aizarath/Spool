@@ -1,7 +1,5 @@
 package com.aizarath.spool.feature_note.presentation.add_edit_note.components
 
-import androidx.compose.animation.Animatable
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,26 +10,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.aizarath.spool.feature_note.presentation.common.SlantedShape
 import com.aizarath.spool.feature_note.presentation.add_edit_note.AddEditNoteEvent
-import com.aizarath.spool.feature_note.presentation.common.ColorSheet
 import com.aizarath.spool.feature_note.presentation.common.ColorThemeWrapper
 import com.aizarath.spool.feature_note.presentation.common.TextFieldState
 import com.aizarath.spool.ui.theme.DefaultTheme
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,7 +30,7 @@ fun AddEditNote(
     noteColor: Int,
     onEvent: (AddEditNoteEvent) -> Unit,
 ) {
-    val fontColor = DefaultTheme.getFontColor(Color(noteColor))
+    val fontColor = DefaultTheme.getContra(Color(noteColor))
 
     ColorThemeWrapper(
         initialColor = noteColor,
@@ -53,12 +42,16 @@ fun AddEditNote(
             containerColor = Color(noteColor),
             topBar = {
                 NoteTopBar(
-                    onBackClick = {onEvent(AddEditNoteEvent.SaveNote)}
+                    onBackClick = {onEvent(AddEditNoteEvent.SaveNote)},
+                    containerColor = Color(noteColor),
+                    onContainerColor = DefaultTheme.getContra(Color(noteColor))
                 )
             },
             bottomBar = {
                 NoteToolBar(
-                    onColorClick = openSheet
+                    onColorClick = openSheet,
+                    containerColor = Color(noteColor),
+                    onContainerColor = DefaultTheme.getContra(Color(noteColor))
                 )
             }
         ) { innerPadding ->

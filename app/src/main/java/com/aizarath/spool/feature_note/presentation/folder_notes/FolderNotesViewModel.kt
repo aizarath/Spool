@@ -33,8 +33,6 @@ class FolderNotesViewModel @Inject constructor(
 
     private val folderId: Int = checkNotNull(savedStateHandle["folderId"])
 
-    private var recentlyDeletedNote: Note? = null
-
     private var getNotesJob: Job? = null
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
@@ -54,18 +52,6 @@ class FolderNotesViewModel @Inject constructor(
                 }
                 getNotes(event.noteOrder)
             }
-            is FolderNotesEvent.DeleteNote -> {
-                viewModelScope.launch {
-                    noteUseCases.deleteNote(event.note)
-                    recentlyDeletedNote = event.note
-                }
-            }
-            is FolderNotesEvent.RestoreNote -> {
-                viewModelScope.launch {
-                    noteUseCases.saveNoteAndTouchFolder(recentlyDeletedNote ?: return@launch)
-                    recentlyDeletedNote = null
-                }
-            }
             is FolderNotesEvent.ChangeColor -> {
                 val currentFolder = state.value.folder
                 viewModelScope.launch {
@@ -81,8 +67,32 @@ class FolderNotesViewModel @Inject constructor(
                     isOrderSectionVisible = !state.value.isOrderSectionVisible
                 )
             }
-            is FolderNotesEvent.DeleteFolder -> {
+            is FolderNotesEvent.ToggleSelection -> {
+                val currentSelected = state.value.selectedNoteIds
+                val newSelected = if (currentSelected.contains(event.noteId)){
+                    currentSelected - event.noteId
+                } else {
+                    currentSelected + event.noteId
+                }
 
+                _state.value = state.value.copy(
+                    selectedNoteIds = newSelected,
+                    isSelectionMode = newSelected.isNotEmpty()
+                )
+            }
+            is FolderNotesEvent.SelectAll -> {
+                val allIds = state.value.notes.map {it.id!!}.toSet()
+                _state.value = state.value.copy(selectedNoteIds = allIds)
+            }
+            is FolderNotesEvent.ClearSelection -> {
+                _state.value = state.value.copy(selectedNoteIds = emptySet(), isSelectionMode = false)
+            }
+            is FolderNotesEvent.DeleteSelectedNotes -> {
+                viewModelScope.launch {
+                    noteUseCases.deleteNotes(state.value.selectedNoteIds.toList())
+
+                    onEvent(FolderNotesEvent.ClearSelection)
+                }
             }
         }
     }

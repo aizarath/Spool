@@ -7,5 +7,5 @@ import com.aizarath.spool.feature_note.domain.util.OrderType
 data class FoldersState(
     val folders: List<Folder> = emptyList(),
     val folderOrder: FolderOrder = FolderOrder.Modified(OrderType.Descending),
-    val isOrderSectionVisible: Boolean = false
+    val isOrderSectionVisible: Boolean = false,
 )

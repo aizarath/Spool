@@ -9,18 +9,24 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.aizarath.spool.ui.theme.DefaultTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NoteTopBar(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    containerColor: Color,
+    onContainerColor: Color,
 ) {
     TopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent
-        ),
         title = {Text("")},
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = containerColor,
+            navigationIconContentColor = onContainerColor,
+            actionIconContentColor = onContainerColor
+        ),
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")

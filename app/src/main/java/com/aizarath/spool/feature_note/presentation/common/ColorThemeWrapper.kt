@@ -2,7 +2,11 @@ package com.aizarath.spool.feature_note.presentation.common
 
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -35,29 +39,40 @@ fun ColorThemeWrapper(
     val showColorSheet = remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
+    val slantedShape = SlantedShape(slantHeight = 80.dp)
+
     val baseColor = noteBackgroundAnimatable.value
-    val darkerColor = lerp(baseColor, Color.Black, 0.5f)
 
     if (showColorSheet.value){
         ModalBottomSheet(
             onDismissRequest = {showColorSheet.value = false},
             sheetState = sheetState,
-            shape = SlantedShape(slantHeight = 80.dp),
+            shape = slantedShape,
             dragHandle = null,
-            containerColor = darkerColor
+            containerColor = MaterialTheme.colorScheme.surface
         ) {
-            ColorSheet(
-                selectedColor = initialColor,
-                onColorSelected = { colorInt ->
-                    scope.launch {
-                        noteBackgroundAnimatable.animateTo(
-                            targetValue = Color(colorInt),
-                            animationSpec = tween(durationMillis = 500)
-                        )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.outline,
+                        shape = slantedShape
+                    )
+            ) {
+                ColorSheet(
+                    selectedColor = initialColor,
+                    onColorSelected = { colorInt ->
+                        scope.launch {
+                            noteBackgroundAnimatable.animateTo(
+                                targetValue = Color(colorInt),
+                                animationSpec = tween(durationMillis = 500)
+                            )
+                        }
+                        onColorChanged(colorInt)
                     }
-                    onColorChanged(colorInt)
-                }
-            )
+                )
+            }
         }
     }
 

@@ -36,6 +36,9 @@ import androidx.compose.ui.unit.dp
 import com.aizarath.spool.feature_note.presentation.common.AddFloatingButton
 import com.aizarath.spool.feature_note.presentation.common.NoteItem
 import com.aizarath.spool.feature_note.presentation.common.OrderSection
+import com.aizarath.spool.feature_note.presentation.common.SelectionState
+import com.aizarath.spool.feature_note.presentation.common.SelectionTopBar
+import com.aizarath.spool.feature_note.presentation.folder_notes.components.FolderNotesTopBar
 import com.aizarath.spool.feature_note.presentation.notes.NotesEvent
 import com.aizarath.spool.feature_note.presentation.notes.NotesState
 
@@ -43,20 +46,22 @@ import com.aizarath.spool.feature_note.presentation.notes.NotesState
 fun Notes(
     state: NotesState,
     onEvent: (NotesEvent) -> Unit,
-    onNoteClick: (folderId: Int?, noteId: Int?, color: Int?) -> Unit
+    onNoteClick: (folderId: Int?, noteId: Int?, color: Int?) -> Unit,
+    selectionState: SelectionState
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            if (state.isSelectionMode){
+                SelectionTopBar(selectionState = selectionState)
+            }
+        },
         floatingActionButton = {
             AddFloatingButton(
                 folderId = null,
                 onNoteClick = onNoteClick
             )
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -108,13 +113,20 @@ fun Notes(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(state.notes){ note ->
+                    val isSelected = state.selectedNoteIds.contains(note.id)
+
                     NoteItem(
                         note = note,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                onNoteClick(1, note.id, note.color)
-                            },
+                            .fillMaxWidth(),
+                        isSelected = isSelected,
+                        isSelectionMode = state.isSelectionMode,
+                        onToggleSelection = { id ->
+                            onEvent(NotesEvent.ToggleSelection(id))
+                        },
+                        onClick = {
+                            onNoteClick(1, note.id, note.color)
+                        },
                     )
                 }
             }

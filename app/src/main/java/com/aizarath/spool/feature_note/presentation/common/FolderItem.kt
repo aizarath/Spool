@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.aizarath.spool.R
 import com.aizarath.spool.feature_note.domain.model.Folder
+import com.aizarath.spool.ui.theme.DefaultTheme
 import java.io.File
 
 @Composable
@@ -65,12 +66,14 @@ fun FolderItem(
         ) {
             Text(
                 text = folder.name,
+                color = DefaultTheme.getContra(Color(folder.color)),
                 style = MaterialTheme.typography.headlineSmall
             )
             Spacer(modifier = Modifier.width(12.dp))
             folder.description?.let {
                 Text(
                     text = it,
+                    color = DefaultTheme.getContra(Color(folder.color)),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

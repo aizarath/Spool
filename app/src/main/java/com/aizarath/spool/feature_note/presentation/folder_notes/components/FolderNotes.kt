@@ -1,6 +1,5 @@
 package com.aizarath.spool.feature_note.presentation.folder_notes.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +24,8 @@ import com.aizarath.spool.feature_note.presentation.common.AddFloatingButton
 import com.aizarath.spool.feature_note.presentation.common.ColorThemeWrapper
 import com.aizarath.spool.feature_note.presentation.common.FolderItem
 import com.aizarath.spool.feature_note.presentation.common.NoteItem
+import com.aizarath.spool.feature_note.presentation.common.SelectionState
+import com.aizarath.spool.feature_note.presentation.common.SelectionTopBar
 import com.aizarath.spool.feature_note.presentation.folder_notes.FolderNotesEvent
 import com.aizarath.spool.feature_note.presentation.folder_notes.FolderNotesState
 import com.aizarath.spool.ui.theme.DefaultTheme
@@ -36,7 +37,9 @@ fun FolderNotes(
     state: FolderNotesState,
     onEvent: (FolderNotesEvent) -> Unit,
     onNoteClick: (folderId: Int?, noteId: Int?, color: Int?) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onEditClick: () -> Unit,
+    selectionState: SelectionState
 ) {
 
     ColorThemeWrapper(
@@ -46,11 +49,15 @@ fun FolderNotes(
         Scaffold(
             containerColor = MaterialTheme.colorScheme.background,
             topBar = {
-                // Sticky bar
-                FolderTopBar(
-                    onBackClick = onBackClick,
-                    onColorClick = openSheet
-                )
+                if (state.isSelectionMode){
+                    SelectionTopBar(selectionState = selectionState)
+                } else {
+                    FolderNotesTopBar(
+                        onBackClick = onBackClick,
+                        onColorClick = openSheet,
+                        onEditClick = onEditClick
+                    )
+                }
             },
             floatingActionButton = {
                 AddFloatingButton(
@@ -91,13 +98,17 @@ fun FolderNotes(
                 }
 
                 items(state.notes){ note ->
+                    val isSelected = state.selectedNoteIds.contains(note.id)
                     NoteItem(
                         note = note,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable{
-                                onNoteClick(state.folder?.id,note.id, note.color)
-                            },
+                            .fillMaxWidth(),
+                        isSelected = isSelected,
+                        isSelectionMode = state.isSelectionMode,
+                        onToggleSelection = { id ->
+                            onEvent(FolderNotesEvent.ToggleSelection(id))
+                        },
+                        onClick = { onNoteClick(state.folder?.id, note.id, note.color) },
                     )
                 }
             }
@@ -142,8 +153,16 @@ fun FolderNotesPreview() {
                 )
             ),
             onEvent = {},
-            onNoteClick = {_, _, _ -> },
-            onBackClick = {}
+            onNoteClick = { _, _, _ -> },
+            onBackClick = {},
+            onEditClick = {},
+            selectionState = SelectionState(
+                isSelectionMode = false,
+                selectedCount = 0,
+                onClearSelection = {},
+                onSelectAll = {},
+                onDelete = {}
+            )
         )
     }
 }

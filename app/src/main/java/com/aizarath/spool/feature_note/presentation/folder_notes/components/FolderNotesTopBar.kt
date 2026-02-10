@@ -8,16 +8,15 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FolderTopBar(
+fun FolderNotesTopBar(
     onBackClick: () -> Unit,
-    onColorClick: () -> Unit
+    onColorClick: () -> Unit,
+    onEditClick: () -> Unit
 ) {
     TopAppBar(
         title = {Text("")},
@@ -28,7 +27,8 @@ fun FolderTopBar(
         },
         actions = {
             FolderActions(
-                onColorClick = onColorClick
+                onColorClick = onColorClick,
+                onEditClick = onEditClick
             )
         },
         colors = TopAppBarDefaults.topAppBarColors(
