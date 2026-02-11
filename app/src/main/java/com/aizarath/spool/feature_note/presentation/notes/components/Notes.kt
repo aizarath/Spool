@@ -5,7 +5,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,12 +23,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -38,7 +33,6 @@ import com.aizarath.spool.feature_note.presentation.common.NoteItem
 import com.aizarath.spool.feature_note.presentation.common.OrderSection
 import com.aizarath.spool.feature_note.presentation.common.SelectionState
 import com.aizarath.spool.feature_note.presentation.common.SelectionTopBar
-import com.aizarath.spool.feature_note.presentation.folder_notes.components.FolderNotesTopBar
 import com.aizarath.spool.feature_note.presentation.notes.NotesEvent
 import com.aizarath.spool.feature_note.presentation.notes.NotesState
 

@@ -15,10 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
-import com.aizarath.spool.feature_note.presentation.add_edit_note.AddEditNoteEvent
 import com.aizarath.spool.ui.theme.DefaultTheme
 import kotlinx.coroutines.launch
 

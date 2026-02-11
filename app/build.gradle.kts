@@ -89,6 +89,12 @@ dependencies {
     // Coil
     implementation("io.coil-kt.coil3:coil-compose:3.3.0")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.3.0")
+
+    // Google Fonts
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.7.0")
+
+    // Splash screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }
 
 room{

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/rubik_beastly</item>
+        <item>@font/rubik_maze</item>
+        <item>@font/rubik_scribble</item>
+        <item>@font/rubik_bubbles</item>
+    </array>
+</resources>

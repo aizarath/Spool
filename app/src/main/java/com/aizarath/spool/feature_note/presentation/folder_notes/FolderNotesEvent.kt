@@ -8,6 +8,7 @@ sealed class FolderNotesEvent {
     data class Order(val noteOrder: NoteOrder): FolderNotesEvent()
     data class ChangeColor(val color: Int) : FolderNotesEvent()
     object ToggleOrderSection: FolderNotesEvent()
+    object DeleteFolder: FolderNotesEvent()
     data class ToggleSelection(val noteId: Int) : FolderNotesEvent()
     object SelectAll : FolderNotesEvent()
     object ClearSelection : FolderNotesEvent()

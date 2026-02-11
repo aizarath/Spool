@@ -2,6 +2,7 @@ package com.aizarath.spool.feature_note.presentation.folder_notes.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,8 +16,7 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun FolderNotesTopBar(
     onBackClick: () -> Unit,
-    onColorClick: () -> Unit,
-    onEditClick: () -> Unit
+    onMenuClick: () -> Unit,
 ) {
     TopAppBar(
         title = {Text("")},
@@ -26,10 +26,9 @@ fun FolderNotesTopBar(
             }
         },
         actions = {
-            FolderActions(
-                onColorClick = onColorClick,
-                onEditClick = onEditClick
-            )
+            IconButton(onClick = onMenuClick) {
+                Icon(imageVector = Icons.Default.Menu, contentDescription = "Folder Menu")
+            }
         },
         colors = TopAppBarDefaults.topAppBarColors(
         containerColor = Color.Transparent

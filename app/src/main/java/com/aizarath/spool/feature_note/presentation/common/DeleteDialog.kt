@@ -17,7 +17,7 @@ import com.aizarath.spool.ui.theme.SpoolTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeleteDialog(
-    count: Int,
+    count: Int = 1,
     onDismiss: () -> Unit,
     onDelete: () -> Unit
 ) {

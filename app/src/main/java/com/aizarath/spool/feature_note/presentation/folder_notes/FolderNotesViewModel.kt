@@ -67,6 +67,22 @@ class FolderNotesViewModel @Inject constructor(
                     isOrderSectionVisible = !state.value.isOrderSectionVisible
                 )
             }
+            is FolderNotesEvent.DeleteFolder -> {
+                val folderIsEmpty: Boolean = state.value.notes.isEmpty()
+
+                if (folderIsEmpty){
+                    val currentFolder = state.value.folder
+                    viewModelScope.launch {
+                        currentFolder?.let {
+                            folderUseCases.deleteFolder(folder = currentFolder)
+                        }
+                    }
+                } else {
+                    viewModelScope.launch {
+                        _eventFlow.emit(UiEvent.ShowSnackBar("Cannot delete a non-empty folder."))
+                    }
+                }
+            }
             is FolderNotesEvent.ToggleSelection -> {
                 val currentSelected = state.value.selectedNoteIds
                 val newSelected = if (currentSelected.contains(event.noteId)){

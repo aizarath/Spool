@@ -1,6 +1,8 @@
 package com.aizarath.spool.feature_note.presentation.folder_notes.components
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,8 +13,14 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -22,10 +30,12 @@ import com.aizarath.spool.feature_note.domain.model.Folder
 import com.aizarath.spool.feature_note.domain.model.Note
 import com.aizarath.spool.feature_note.presentation.common.AddFloatingButton
 import com.aizarath.spool.feature_note.presentation.common.ColorThemeWrapper
+import com.aizarath.spool.feature_note.presentation.common.ErrorSnackBar
 import com.aizarath.spool.feature_note.presentation.common.FolderItem
 import com.aizarath.spool.feature_note.presentation.common.NoteItem
 import com.aizarath.spool.feature_note.presentation.common.SelectionState
 import com.aizarath.spool.feature_note.presentation.common.SelectionTopBar
+import com.aizarath.spool.feature_note.presentation.common.SlantedShape
 import com.aizarath.spool.feature_note.presentation.folder_notes.FolderNotesEvent
 import com.aizarath.spool.feature_note.presentation.folder_notes.FolderNotesState
 import com.aizarath.spool.ui.theme.DefaultTheme
@@ -36,26 +46,34 @@ import com.aizarath.spool.ui.theme.SpoolTheme
 fun FolderNotes(
     state: FolderNotesState,
     onEvent: (FolderNotesEvent) -> Unit,
+    snackbarHostState: SnackbarHostState,
     onNoteClick: (folderId: Int?, noteId: Int?, color: Int?) -> Unit,
     onBackClick: () -> Unit,
     onEditClick: () -> Unit,
+    onDeleteFolder: () -> Unit,
     selectionState: SelectionState
 ) {
+    val openMenuSheet = remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState()
+    val slantedShape = SlantedShape(slantHeight = 80.dp)
+    val onDismissMenu = { openMenuSheet.value = false }
 
     ColorThemeWrapper(
         initialColor = state.folder?.color ?: DefaultTheme.defaultColor.toArgb(),
         onColorChanged = {newColor -> onEvent(FolderNotesEvent.ChangeColor(newColor))}
-    ) { _, openSheet ->
+    ) { _, openColorSheet ->
         Scaffold(
             containerColor = MaterialTheme.colorScheme.background,
+            snackbarHost = { SnackbarHost(hostState = snackbarHostState) { data ->
+                ErrorSnackBar(data = data)
+            } },
             topBar = {
                 if (state.isSelectionMode){
                     SelectionTopBar(selectionState = selectionState)
                 } else {
                     FolderNotesTopBar(
                         onBackClick = onBackClick,
-                        onColorClick = openSheet,
-                        onEditClick = onEditClick
+                        onMenuClick = {openMenuSheet.value = true},
                     )
                 }
             },
@@ -113,6 +131,41 @@ fun FolderNotes(
                 }
             }
         }
+
+        if (openMenuSheet.value) {
+            ModalBottomSheet(
+                onDismissRequest = onDismissMenu,
+                sheetState = sheetState,
+                shape = slantedShape,
+                dragHandle = null,
+                containerColor = MaterialTheme.colorScheme.surface
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.outline,
+                            shape = slantedShape
+                        )
+                ) {
+                    FolderActionsSheet(
+                        onColorClick = {
+                            onDismissMenu()
+                            openColorSheet()
+                        },
+                        onEditClick = {
+                            onDismissMenu()
+                            onEditClick()
+                        },
+                        onDeleteFolder = {
+                            onDismissMenu()
+                            onDeleteFolder()
+                        },
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -156,13 +209,15 @@ fun FolderNotesPreview() {
             onNoteClick = { _, _, _ -> },
             onBackClick = {},
             onEditClick = {},
+            onDeleteFolder = {},
             selectionState = SelectionState(
                 isSelectionMode = false,
                 selectedCount = 0,
                 onClearSelection = {},
                 onSelectAll = {},
                 onDelete = {}
-            )
+            ),
+            snackbarHostState = SnackbarHostState(),
         )
     }
 }

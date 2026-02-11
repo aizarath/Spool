@@ -1,5 +1,6 @@
 package com.aizarath.spool.feature_note.presentation.folder_notes
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -34,13 +35,17 @@ fun FolderNotesScreen(
         )
     }
 
+    val snackbarHostState = remember { SnackbarHostState() }
+
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when(event){
                 is UiEvent.NavigateBack -> {
                     navController.navigateUp()
                 }
-                is UiEvent.ShowSnackBar -> TODO()
+                is UiEvent.ShowSnackBar -> {
+                    snackbarHostState.showSnackbar(event.message)
+                }
             }
         }
     }
@@ -48,8 +53,9 @@ fun FolderNotesScreen(
     FolderNotes(
         state = state,
         onEvent = onEvent,
+        snackbarHostState = snackbarHostState,
         onNoteClick = { folderId, noteId, color ->
-            if (noteId != null && color != null){
+            if (noteId != null && color != null) {
                 navController.navigate(
                     Screen.AddEditNoteScreen.route + "?folderId=${folderId}&noteId=${noteId}&noteColor=${color}"
                 )
@@ -57,9 +63,10 @@ fun FolderNotesScreen(
                 navController.navigate(Screen.AddEditNoteScreen.route + "?folderId=${folderId}")
             }
         },
-        onBackClick = {navController.navigateUp()},
+        onBackClick = { navController.navigateUp() },
         onEditClick = { showAddFolderDialog.value = true },
-        selectionState = selectionState
+        selectionState = selectionState,
+        onDeleteFolder = {onEvent(FolderNotesEvent.DeleteFolder)}
     )
 
     if (showAddFolderDialog.value) {

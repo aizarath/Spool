@@ -4,11 +4,12 @@ import androidx.compose.ui.graphics.Color
 
 val Blush = Color(0xFFFFC4E2)
 val Lemon = Color(0xFFFFF455)
-val Tangerine = Color(0xFFF68A68)
+val Tangerine = Color(0xFFFF8C8C)
 val Maple = Color(0xFFDE75B8)
-val Mango = Color(0xFFFFC700)
-val Slate = Color(0xFF252526)
-val CherryWine = Color(0xF4751427)
+val Mango = Color(0xFFCB4848)
+val Slate = Color(0xFF525252)
+val Berry = Color(0xF4BD8ADC)
+val AppleGreen = Color(0xFFD6DF65)
 
 val Phantom = Color(0xFF0E0E0E)
 val EggWash = Color(0xFFF5DB86)

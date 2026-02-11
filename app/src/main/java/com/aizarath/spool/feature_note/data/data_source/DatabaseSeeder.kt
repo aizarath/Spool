@@ -3,7 +3,6 @@ package com.aizarath.spool.feature_note.data.data_source
 import android.content.ContentValues
 import androidx.room.OnConflictStrategy
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.aizarath.spool.R
 import javax.inject.Inject
 
 class DatabaseSeeder @Inject constructor() {

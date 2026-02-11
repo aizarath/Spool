@@ -50,12 +50,11 @@ fun ColorSheet(
                 Box(
                     modifier = Modifier
                         .size(50.dp)
-                        .shadow(10.dp, CircleShape)
                         .clip(CircleShape)
                         .background(color)
                         .border(
                             width = 1.dp,
-                            color = if (selectedColor == colorInt) MaterialTheme.colorScheme.outline else Color.Transparent,
+                            color = if (selectedColor == colorInt) MaterialTheme.colorScheme.outline else color,
                             shape = CircleShape
                         )
                         .clickable{onColorSelected(colorInt)}

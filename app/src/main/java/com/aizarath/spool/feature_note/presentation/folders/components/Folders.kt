@@ -2,6 +2,7 @@ package com.aizarath.spool.feature_note.presentation.folders.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,10 +10,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -20,14 +23,21 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.aizarath.spool.feature_note.domain.model.Folder
 import com.aizarath.spool.feature_note.domain.util.FolderOrder
 import com.aizarath.spool.feature_note.domain.util.OrderType
 import com.aizarath.spool.feature_note.presentation.common.AddFloatingButton
 import com.aizarath.spool.feature_note.presentation.common.FolderItem
 import com.aizarath.spool.feature_note.presentation.folders.FoldersState
+import com.aizarath.spool.ui.theme.BeastlyFontFamily
 import com.aizarath.spool.ui.theme.SpoolTheme
 
 @Composable
@@ -57,14 +67,36 @@ fun Folders(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = "Vaults",
-                    style = MaterialTheme.typography.headlineLarge
-                )
+                Box{
+                    // Border
+                    Text(
+                        text = "Spool",
+                        fontFamily = BeastlyFontFamily,
+                        style = TextStyle(
+                            fontSize = 40.sp,
+                            drawStyle = Stroke(width = 4f, join = StrokeJoin.Round),
+                            color = MaterialTheme.colorScheme.outline
+                        )
+                    )
+                    // Fill (front)
+                    Text(
+                        text = "Spool",
+                        fontFamily = BeastlyFontFamily,
+                        style = TextStyle(
+                            fontSize = 40.sp,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            shadow = Shadow(
+                                color = MaterialTheme.colorScheme.outline,
+                                offset = Offset(0f, 12f),
+                                blurRadius = 0f
+                            )
+                        )
+                    )
+                }
                 IconButton(
                     onClick = {onAddFolderClick(null, null)}
                 ) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add folder")
+                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add folder", modifier = Modifier.size(54.dp), tint = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
             }
             Spacer(Modifier.height(16.dp))
